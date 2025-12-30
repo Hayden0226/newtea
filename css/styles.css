@@ -1,0 +1,586 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: url("../images/茶百戏背景.jpg") no-repeat center center/cover;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    touch-action: manipulation;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 页面容器 */
+.page {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.page.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 第一页样式 */
+.page-1 .main-content {
+    position: absolute;
+    top: 17%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* 中心展示圆 */
+.display-area {
+    width: 100%;
+    max-width: 300px;
+    height: 300px;
+    border-radius: 60%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+}
+
+.display-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 图片弹窗样式 */
+.startup-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url("../images/茶百戏文案图片.png") no-repeat center/contain;
+    width: 600px;
+    height: 600px;
+    z-index: 1000;
+    animation: fadeInScale 0.5s ease-out;
+    cursor: pointer;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .startup-popup {
+        width: 250px;
+        height: 167px;
+    }
+}
+
+@media (max-width: 320px) {
+    .startup-popup {
+        width: 200px;
+        height: 133px;
+    }
+}
+
+
+/* 滚动栏容器 - 固定在底部20%位置 */
+.scroll-container-wrapper {
+    position: fixed;
+    bottom: 25%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+    z-index: 10;
+}
+
+/* 滚动条容器 */
+.scroll-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+}
+
+/* 横向滚动条 - 每次显示3个图片 */
+.image-scrollbar {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    width: calc(100% - 100px);
+    max-width: 500px;
+}
+
+.image-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* 缩略图容器 */
+.thumbnail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* 缩略图 - 每次显示3个 */
+.thumbnail {
+    width: calc(33.333% - 10px);
+    min-width: 100px;
+    max-width: 150px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .3s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+}
+
+.thumbnail:active {
+    transform: scale(0.95);
+}
+
+.thumbnail.active {
+    border: 3px solid #4CAF50;
+    box-shadow: 0 0 0 2px #fff inset;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+/* 左右按钮 - 使用本地素材，移除圆形白色背景 */
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .3s;
+    z-index: 20;
+    touch-action: manipulation;
+    padding: 0;
+}
+
+.scroll-btn img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    transition: .3s;
+}
+
+.scroll-btn:active img {
+    transform: scale(0.9);
+}
+
+.scroll-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.prev-btn {
+    left: 5px;
+}
+
+.next-btn {
+    right: 5px;
+}
+
+.scroll-btn span {
+    display: none;
+}
+
+/* 第二页样式 - 纯背景图页面 */
+.page-2 {
+    background: url("../images/结尾分享背景图.jpg") no-repeat center center/cover;
+    position: relative;
+}
+
+/* 分享按钮样式 */
+.share-btn {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    padding: 12px 30px;
+    font-size: 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.share-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateX(-50%) scale(1.05);
+}
+
+.share-btn:active {
+    transform: translateX(-50%) scale(0.95);
+}
+
+/* 分享提示样式 */
+.share-tip {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    display: none;
+    max-width: 80%;
+}
+
+.share-tip.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* 右下角下一页按钮 */
+.next-page-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 100;
+    touch-action: manipulation;
+}
+
+.next-page-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.05);
+}
+
+.next-page-btn:active {
+    transform: scale(0.95);
+}
+
+.next-page-btn img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+/* 上一页按钮 */
+.prev-page-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 100;
+    touch-action: manipulation;
+    display: none;
+}
+
+.prev-page-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.05);
+}
+
+.prev-page-btn:active {
+    transform: scale(0.95);
+}
+
+.prev-page-btn img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    transform: rotate(180deg);
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    body {
+        padding: 0;
+    }
+
+    .page-1 .main-content {
+        margin-top: 5vh;
+    }
+
+    .display-area {
+        width: 250px;
+        height: 250px;
+    }
+
+    .scroll-container {
+        max-width: 400px;
+    }
+
+    .image-scrollbar {
+        width: calc(100% - 80px);
+        max-width: 350px;
+        gap: 12px;
+    }
+
+    .thumbnail {
+        width: calc(33.333% - 8px);
+        min-width: 80px;
+        max-width: 120px;
+    }
+
+    .thumbnail-name {
+        font-size: 12px;
+        min-width: 70px;
+        padding: 1px 6px;
+    }
+
+    .scroll-btn {
+        width: 25px;
+        height: 25px;
+    }
+
+    .scroll-btn img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .prev-btn {
+        left: 2px;
+    }
+
+    .next-btn {
+        right: 2px;
+    }
+
+    .scroll-container-wrapper {
+        padding: 0 15px;
+        bottom: 5%;
+    }
+
+    .share-btn {
+        padding: 10px 25px;
+        font-size: 16px;
+        bottom: 15%;
+    }
+
+    .next-page-btn,
+    .prev-page-btn {
+        bottom: 20px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .next-page-btn img,
+    .prev-page-btn img {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media (max-width: 320px) {
+    .display-area {
+        width: 200px;
+        height: 200px;
+    }
+
+    .scroll-container {
+        max-width: 300px;
+    }
+
+    .image-scrollbar {
+        width: calc(100% - 60px);
+        max-width: 280px;
+        gap: 10px;
+    }
+
+    .thumbnail {
+        width: calc(33.333% - 6px);
+        min-width: 70px;
+        max-width: 100px;
+    }
+
+    .thumbnail-name {
+        font-size: 11px;
+        min-width: 60px;
+        padding: 1px 4px;
+    }
+
+    .scroll-btn {
+        width: 22px;
+        height: 22px;
+    }
+
+    .scroll-btn img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .scroll-container-wrapper {
+        bottom: 1%;
+    }
+
+    .share-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+        bottom: 12%;
+    }
+
+    .next-page-btn,
+    .prev-page-btn {
+        bottom: 15px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .next-page-btn img,
+    .prev-page-btn img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (min-width: 768px) {
+    .scroll-container {
+        max-width: 700px;
+    }
+
+    .image-scrollbar {
+        width: calc(100% - 120px);
+        max-width: 600px;
+        gap: 18px;
+    }
+
+    .thumbnail {
+        width: calc(33.333% - 12px);
+        min-width: 120px;
+        max-width: 180px;
+    }
+
+    .thumbnail-name {
+        font-size: 15px;
+        min-width: 100px;
+        padding: 3px 10px;
+    }
+
+    .scroll-btn {
+        width: 35px;
+        height: 35px;
+    }
+
+    .scroll-btn img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .scroll-btn:hover img {
+        transform: scale(1.1);
+    }
+
+    .share-btn {
+        padding: 15px 35px;
+        font-size: 20px;
+    }
+
+    .next-page-btn,
+    .prev-page-btn {
+        width: 55px;
+        height: 55px;
+    }
+
+    .next-page-btn img,
+    .prev-page-btn img {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* 防止双击缩放 */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 选择图片时的反馈 */
+.thumbnail:focus {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}

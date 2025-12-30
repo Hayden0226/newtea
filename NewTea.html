@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>茶百戏图片选择器</title>
+    <!-- 引入html2canvas库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 引入外部CSS文件 -->
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+    <!-- 图片弹窗 -->
+    <div class="startup-popup" id="startupPopup"></div>
+
+    <!-- 第一页：图片选择器 -->
+    <div class="page page-1 active">
+        <div class="main-content">
+            <div class="display-area">
+                <img id="selectedImage" src="images/沙盘.png" alt="茶百戏图案">
+            </div>
+        </div>
+
+        <div class="scroll-container-wrapper">
+            <div class="scroll-container">
+                <button class="scroll-btn prev-btn" id="prevBtn" aria-label="上一张">
+                    <img src="images/左.png" alt="上一张">
+                </button>
+
+                <div class="image-scrollbar" id="imageScrollbar">
+                    <div class="thumbnail-container">
+                        <div class="thumbnail active" onclick="selectImage(this)" tabindex="0">
+                            <img src="images/比翼双飞.jpg" alt="比翼双飞">
+                        </div>
+                        <div class="thumbnail-name">比翼双飞</div>
+                    </div>
+                    <div class="thumbnail-container">
+                        <div class="thumbnail" onclick="selectImage(this)" tabindex="0">
+                            <img src="images/荷叶戏鱼.png" alt="荷叶戏鱼">
+                        </div>
+                        <div class="thumbnail-name">荷叶戏鱼</div>
+                    </div>
+                    <div class="thumbnail-container">
+                        <div class="thumbnail" onclick="selectImage(this)" tabindex="0">
+                            <img src="images/马到成功.png" alt="马到成功">
+                        </div>
+                        <div class="thumbnail-name">马到成功</div>
+                    </div>
+                    <div class="thumbnail-container">
+                        <div class="thumbnail" onclick="selectImage(this)" tabindex="0">
+                            <img src="images/山水行舟.png" alt="山水行舟">
+                        </div>
+                        <div class="thumbnail-name">山水行舟</div>
+                    </div>
+                    <div class="thumbnail-container">
+                        <div class="thumbnail" onclick="selectImage(this)" tabindex="0">
+                            <img src="images/双龙戏珠.png" alt="双龙戏珠">
+                        </div>
+                        <div class="thumbnail-name">双龙戏珠</div>
+                    </div>
+                </div>
+
+                <button class="scroll-btn next-btn" id="nextBtn" aria-label="下一张">
+                    <img src="images/右.png" alt="下一张">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二页：纯背景图页面 -->
+    <div class="page page-2">
+        <!-- 分享按钮 -->
+        <button class="share-btn" id="shareBtn">点击分享</button>
+    </div>
+
+    <!-- 分享提示 -->
+    <div class="share-tip" id="shareTip">
+        <h3>截图已保存</h3>
+        <p>请打开微信，选择好友或群聊，点击"+"号选择"照片"，找到刚刚保存的截图进行分享。</p>
+        <button onclick="closeShareTip()"
+            style="margin-top: 10px; padding: 8px 16px; background: #07C160; color: white; border: none; border-radius: 5px; cursor: pointer;">知道了</button>
+    </div>
+
+    <!-- 右下角下一页按钮 -->
+    <button class="next-page-btn" id="nextPageBtn" aria-label="下一页">
+        <img src="images/右.png" alt="下一页">
+    </button>
+
+    <!-- 左下角上一页按钮 -->
+    <button class="prev-page-btn" id="prevPageBtn" aria-label="上一页">
+        <img src="images/右.png" alt="上一页">
+    </button>
+
+    <!-- 引入外部JavaScript文件 -->
+    <script src="js/script.js"></script>
+    <script>
+        // 图片弹窗功能
+        const startupPopup = document.getElementById('startupPopup');
+
+        // 启动应用
+        function startApp() {
+            // 淡出弹窗
+            startupPopup.style.opacity = '0';
+            startupPopup.style.transform = 'translate(-50%, -50%) scale(0.8)';
+
+            // 延迟隐藏弹窗
+            setTimeout(() => {
+                startupPopup.style.display = 'none';
+            }, 300);
+        }
+
+        // 点击图片关闭弹窗
+        startupPopup.addEventListener('click', startApp);
+
+        // 触摸事件支持
+        startupPopup.addEventListener('touchstart', function (e) {
+            e.preventDefault();
+            startApp();
+        });
+
+        // 3秒后自动关闭弹窗（可选功能）
+        // setTimeout(() => {
+        //     if (startupPopup.style.display !== 'none') {
+        //         startApp();
+        //     }
+        // }, 3000);
+    </script>
+</body>
+
+</html>
